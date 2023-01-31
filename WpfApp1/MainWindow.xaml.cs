@@ -20,9 +20,61 @@ namespace WpfApp1
     /// </summary>
     public partial class MainWindow : Window
     {
+        TextBlock lastTextBlockClicked;
+        bool findingMatch = false;
         public MainWindow()
         {
             InitializeComponent();
+
+            SetUpGame();
+        }
+
+        private void SetUpGame()
+        {
+            List<string> animalemoji = new List<string>()
+            {  "🐶" , "🐶",
+                "🐺" ,  "🐺" ,
+                "🐱" , "🐱" ,
+                "🦁" , "🦁" ,
+                "🦊" , "🦊" ,
+                "🐯" , "🐯" ,
+                "🐭" , "🐭" ,
+                "🦝" , "🦝" ,
+            };
+
+            Random random = new Random();
+
+            foreach (TextBlock textblock in maingrid.Children.OfType<TextBlock>())
+            {
+                int index = random.Next(animalemoji.Count);
+                string nextemoji = animalemoji[index];
+                textblock.Text = nextemoji;
+                animalemoji.RemoveAt(index);
+
+            };
+
+        }
+
+        private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            TextBlock textBlock = sender as TextBlock;
+            if (findingMatch == false)
+            {
+                textBlock.Visibility = Visibility.Hidden;
+                lastTextBlockClicked = textBlock;
+                findingMatch = true;
+            }
+            else if (textBlock.Text == lastTextBlockClicked.Text)
+            {
+                textBlock.Visibility = Visibility.Hidden;
+                findingMatch = false;
+            }
+            else
+            {
+                lastTextBlockClicked.Visibility = Visibility.Visible;
+                findingMatch = false;
+
+            }
         }
     }
 }
